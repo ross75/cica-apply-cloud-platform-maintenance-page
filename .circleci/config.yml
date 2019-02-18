@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /app
     docker:
-      - image: docker:17.05.0-ce-git
+    - image: docker:17.05.0-ce-git
       environment:
         APP_NAME: cloud-platform-maintenance-page
     steps:
@@ -53,3 +53,4 @@ jobs:
               docker tag app "${ECR_ENDPOINT}/${APP_NAME}:latest"
               docker push "${ECR_ENDPOINT}/${APP_NAME}:latest"
             fi
+            
