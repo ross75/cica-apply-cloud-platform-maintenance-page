@@ -4,6 +4,8 @@ jobs:
     working_directory: /app
     docker:
       - image: docker:17.05.0-ce-git
+      environment:
+        APP_NAME: cloud-platform-maintenance-page
     steps:
       - checkout
       - setup_remote_docker
@@ -44,10 +46,10 @@ jobs:
             login="$(aws ecr get-login --no-include-email)"
             ${login}
 
-            docker tag app "${ECR_ENDPOINT}/:${CIRCLE_SHA1}"
-            docker push "${ECR_ENDPOINT}/:${CIRCLE_SHA1}"
+            docker tag app "${ECR_ENDPOINT}/${APP_NAME}:${CIRCLE_SHA1}"
+            docker push "${ECR_ENDPOINT}/${APP_NAME}:${CIRCLE_SHA1}"
 
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              docker tag app "${ECR_ENDPOINT}/:latest"
-              docker push "${ECR_ENDPOINT}/:latest"
+              docker tag app "${ECR_ENDPOINT}/${APP_NAME}:latest"
+              docker push "${ECR_ENDPOINT}/${APP_NAME}:latest"
             fi
