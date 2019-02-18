@@ -41,10 +41,13 @@ jobs:
       - deploy:
           name: Push application Docker image
           command: |
+            login="$(aws ecr get-login --no-include-email)"
+            ${login}
+
+            docker tag app "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
+            docker push "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
+
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              region="eu-west-1"
-              login="$(aws ecr get-login)"
-              ${login}
-              docker tag app "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
-              docker push "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
+              docker tag app "${ECR_ENDPOINT}/app:latest"
+              docker push "${ECR_ENDPOINT}/app:latest"
             fi
