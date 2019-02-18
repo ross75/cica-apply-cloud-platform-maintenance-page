@@ -44,10 +44,10 @@ jobs:
             login="$(aws ecr get-login --no-include-email)"
             ${login}
 
-            docker tag app "${ECR_ENDPOINT}:${CIRCLE_SHA1}"
-            docker push "${ECR_ENDPOINT}:${CIRCLE_SHA1}"
+            docker tag app "${ECR_ENDPOINT}/:${CIRCLE_SHA1}"
+            docker push "${ECR_ENDPOINT}/:${CIRCLE_SHA1}"
 
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              docker tag app "${ECR_ENDPOINT}:latest"
-              docker push "${ECR_ENDPOINT}:latest"
+              docker tag app "${ECR_ENDPOINT}/:latest"
+              docker push "${ECR_ENDPOINT}/:latest"
             fi
