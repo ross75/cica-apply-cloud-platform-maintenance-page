@@ -1,2 +1,3 @@
-FROM nginx:alpine
-COPY . /usr/share/nginx/html
+ FROM bitnami/nginx:latest
+
+COPY . /opt/bitnami/nginx/html

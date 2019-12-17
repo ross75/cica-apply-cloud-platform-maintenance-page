@@ -11,6 +11,6 @@ spec:
     spec:
       containers:
       - name: maintenance-page
-        image: 926803513772.dkr.ecr.eu-west-1.amazonaws.com/cloud-platform-maintenance-page:latest
+        image: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/cloud-platform/maintenance:0.2.0 
         ports:
-        - containerPort: 80
+        - containerPort: 8080
