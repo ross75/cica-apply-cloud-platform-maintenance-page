@@ -28,8 +28,9 @@ This can either be done by redeploying the ingress or doing an in-place edit of 
 
 ## Cleaning up 
 
-Once the maintenance page is not needed anymore : 
-  - Change the `serviceName` in your ingress back to the original value (pointing to your app)
-  - Make sure the your app can be reached via the URL, as expected.
-  - Remove your container from ECR
-  - Remove your fork of this repository.
+Once the maintenance page is not needed anymore:
+
+- Change the `serviceName` in your ingress back to the original value (pointing to your app)
+- Make sure the your app can be reached via the URL, as expected.
+- Remove your container from ECR
+- Remove your fork of this repository.
