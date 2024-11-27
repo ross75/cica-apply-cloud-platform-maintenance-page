@@ -1,0 +1,53 @@
+#!/bin/bash
+set -e -o pipefail
+
+source "$(dirname "$0")/set_k8s_context"
+
+echo "*******************************************************************"
+echo "Using EKS_TOKEN env var as a token."
+k8s_token=$(echo $EKS_TOKEN | base64 -d)
+
+echo "Using EKS_CLUSTER_CERT env var."
+cluster_cert=$EKS_CLUSTER_CERT
+
+echo "Using EKS_CLUSTER_NAME env var."
+cluster_name=$EKS_CLUSTER_NAME
+echo "*******************************************************************"
+echo
+
+k8s_namespace=formbuilder-repos
+
+echo "*******************************************************************"
+environment_name=$ENVIRONMENT_NAME
+echo "environment_name is ${environment_name}"
+echo "*******************************************************************"
+echo
+
+echo "*******************************************************************"
+branch_name=$CIRCLE_BRANCH
+echo "branch_name is ${branch_name}"
+echo "*******************************************************************"
+echo
+
+set_context "circleci" "${k8s_namespace}" "${k8s_token}" "${cluster_cert}" "${cluster_name}"
+
+echo "*******************************************************************"
+echo 'Logging into AWS ECR'
+export AWS_DEFAULT_REGION=$ECR_REGION
+aws ecr get-login-password --region $ECR_REGION | docker login --username AWS --password-stdin ${AWS_ECR_REGISTRY_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com
+
+export ECR_REPO_URL=${AWS_ECR_REGISTRY_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_REPOSITORY}
+echo "*******************************************************************"
+echo
+
+echo "*******************************************************************"
+echo "Maintenance Page App. Building fb-maintenance-page:latest"
+docker build -t "${ECR_REPO_URL}:latest" .
+echo "*******************************************************************"
+echo
+
+echo "*******************************************************************"
+echo "Pushing image for fb-maintenance-page:latest"
+docker push "${ECR_REPO_URL}:latest"
+echo "*******************************************************************"
+echo
